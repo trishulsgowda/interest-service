@@ -1,0 +1,43 @@
+Circuit breaker has 3 stages
+
+1. Closed - when the service B is responding properly to it's caller service A
+2. Open - when the service B is down and the service A will not call the service B, instead service A will call the fallback method
+3. Half Closed - service A will try calling the service B for the configured number of times, if the calls are successful then it will go to Closed stage.
+				 if the calls are failed to will go to open stage again 
+				 
+				 
+Closed state will transition to Open state when the failure threshold is exceeded, To calculate the failure threshold a certain number of calls are required.
+-- failureRateThreshold: 50
+-- minimumNumberOfCalls: 5
+				 
+Open stage will get transitioned into Half open after a certain time
+--automaticTransitionFromOpenToHalfOpenEnabled: true
+--waitDurationInOpenState: 5s
+
+Half Open will transtion to Open or Closed based on the number failure or successful calls
+--permittedNumberOfCallsInHalfOpenState: 3
+
+The configuration of the circuit breaker in yaml file looks like this:
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      loan-service:
+        registerHealthIndicator: true
+        failureRateThreshold: 50
+        minimumNumberOfCalls: 5
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        waitDurationInOpenState: 5s
+        permittedNumberOfCallsInHalfOpenState: 3
+        slidingWindowSize: 10
+        slidingWindowType: COUNT_BASED
+        
+The service class will have a @CircuitBreaker annotation, which taken 2 parameter
+1. name - service name
+2. fallbackMethod - method that will be called in open stage
+
+Return type of fall-back method should be same as the actual method
+
+
+Reference: https://salithachathuranga94.medium.com/micro-service-patterns-circuit-breaker-with-spring-boot-253e4a829f94
+Github link: https://github.com/SalithaUCSC/spring-boot-circuit-breaker/tree/main

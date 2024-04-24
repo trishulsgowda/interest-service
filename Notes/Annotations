@@ -1,0 +1,32 @@
+@RestController - combination of @Controller and @ResponseBody
+
+@Controller - accepts HTTP requests
+@ResponseBody - serializes return values to HTTP response. 
+
+1. @RequestMapping - maps URL path to a handler method
+
+Also specifies 
+1. HTTP Request Method like GET, POST, PUT, DELETE
+2. consuming and producing media type
+3. maps URL paramaters 
+4. maps headers
+
+2. @Service - The class is marked as a service class.
+It contain business logic
+The Spring component scanning will automatically detect this class and registers as spring beans
+It can be autowired
+
+3. @Autowired - used for dependency injection - injects beans
+If there are multiple beans we need to disambiguate using @Qualifier annotation
+
+4. @Repository - just to indicate that the given class performs data operations
+The Spring component scanning will automatically detect this class and registers as spring beans
+
+5. @GetMapping(path = "/loans")
+
+6. @RequestParam("type") String type
+- Request param is like query parameters ?q=value
+- Request param is passed in the URL like this -> /loans?type=personal
+
+7. @PathVariable("type") String type
+- Path variable is passed in the URL like this -> /loans/personal
